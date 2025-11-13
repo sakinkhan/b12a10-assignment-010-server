@@ -137,7 +137,6 @@ async function run() {
       }
     });
 
-
     // Test MongoDB connection
     await client.db("admin").command({ ping: 1 });
     console.log(
