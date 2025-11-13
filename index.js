@@ -22,7 +22,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const db = client.db("homeNestDB");
     const propertiesCollection = db.collection("properties");
@@ -122,13 +122,15 @@ async function run() {
 
     // GET all reviews
     app.get("/allReviews", async (req, res) => {
-      const propertyId = req.query.propertyId;
-      const query = propertyId ? { propertyId } : {};
-      const result = await reviewsCollection
-        .find(query)
-        .sort({ createdAt: -1 })
-        .toArray();
-      res.send(result);
+      try {
+        const { email } = req.query;
+        const query = email ? { email } : {};
+        const reviews = await reviewsCollection.find(query).toArray();
+        res.json(reviews);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch reviews" });
+      }
     });
 
     // GET a single review
