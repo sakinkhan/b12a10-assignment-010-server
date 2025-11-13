@@ -71,6 +71,24 @@ async function run() {
       }
     });
 
+    // PUT / Update a property
+    app.put("/properties/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const data = req.body;
+        const objectId = new ObjectId(id);
+        const filter = { _id: objectId };
+        const update = { $set: data };
+        const result = await propertiesCollection.updateOne(filter, update);
+        res.send(result);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: "Failed to update property" });
+      }
+    });
+
+
+
     // Test MongoDB connection
     await client.db("admin").command({ ping: 1 });
     console.log(
