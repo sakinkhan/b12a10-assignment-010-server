@@ -125,6 +125,19 @@ async function run() {
       res.send(result);
     });
 
+    // POST / Add a review
+    app.post("/reviews", async (req, res) => {
+      try {
+        const newReview = { ...req.body, createdAt: new Date() };
+        const result = await reviewsCollection.insertOne(newReview);
+        res.send(result);
+      } catch (err) {
+        console.error("Error adding review:", err);
+        res.status(500).send({ error: "Failed to add review" });
+      }
+    });
+
+
     // Test MongoDB connection
     await client.db("admin").command({ ping: 1 });
     console.log(
