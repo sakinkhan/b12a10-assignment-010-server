@@ -117,6 +117,14 @@ async function run() {
       res.send(result);
     });
 
+    // GET a single review
+    app.get("/reviews/:id", async (req, res) => {
+      const { id } = req.params;
+      const objectId = new ObjectId(id);
+      const result = await reviewsCollection.findOne({ _id: objectId });
+      res.send(result);
+    });
+
     // Test MongoDB connection
     await client.db("admin").command({ ping: 1 });
     console.log(
