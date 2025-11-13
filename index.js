@@ -46,6 +46,19 @@ async function run() {
       }
     });
 
+    // GET a single property by ID
+    app.get("/properties/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const objectId = new ObjectId(id);
+        const result = await propertiesCollection.findOne({ _id: objectId });
+        res.send(result);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: "Failed to fetch property" });
+      }
+    });
+
     // POST / Create a new property
     app.post("/properties", async (req, res) => {
       try {
