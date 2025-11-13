@@ -29,6 +29,20 @@ async function run() {
     const reviewsCollection = db.collection("reviews");
 
     /** -------- PROPERTY ENDPOINTS -------- **/
+    // GET featured properties
+    app.get("/properties/featured", async (req, res) => {
+      try {
+        const properties = await propertiesCollection
+          .find({})
+          .sort({ postedDate: -1 })
+          .limit(6)
+          .toArray();
+        res.send(properties);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: "Failed to fetch properties" });
+      }
+    });
 
     // GET all properties or filter by userEmail
     app.get("/properties", async (req, res) => {
