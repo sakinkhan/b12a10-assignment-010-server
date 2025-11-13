@@ -87,6 +87,21 @@ async function run() {
       }
     });
 
+    // DELETE / Delete a property
+    app.delete("/properties/:id", async (req, res) => {
+      try {
+        const { id } = req.params;
+        const objectId = new ObjectId(id);
+        const filter = { _id: objectId };
+        const result = await propertiesCollection.deleteOne(filter);
+        res.send(result);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: "Failed to delete property" });
+      }
+    });
+
+
 
 
     // Test MongoDB connection
