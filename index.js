@@ -26,6 +26,9 @@ async function run() {
 
     const db = client.db("homeNestDB");
     const propertiesCollection = db.collection("properties");
+    const reviewsCollection = db.collection("reviews");
+
+    /** -------- PROPERTY ENDPOINTS -------- **/
 
     // GET all properties or filter by userEmail
     app.get("/properties", async (req, res) => {
@@ -101,8 +104,18 @@ async function run() {
       }
     });
 
+    /** -------- REVIEWS ENDPOINTS -------- **/
 
-
+    // GET all reviews
+    app.get("/allReviews", async (req, res) => {
+      const propertyId = req.query.propertyId;
+      const query = propertyId ? { propertyId } : {};
+      const result = await reviewsCollection
+        .find(query)
+        .sort({ createdAt: -1 })
+        .toArray();
+      res.send(result);
+    });
 
     // Test MongoDB connection
     await client.db("admin").command({ ping: 1 });
